@@ -7,6 +7,7 @@ package edu.seg2105.client.backend;
 import ocsf.client.*;
 
 import java.io.*;
+import java.util.Arrays;
 
 import edu.seg2105.client.common.*;
 
@@ -67,18 +68,56 @@ public class ChatClient extends AbstractClient
    *
    * @param message The message from the UI.    
    */
-  public void handleMessageFromClientUI(String message)
-  {
+  public void handleMessageFromClientUI(String message) {
     try
     {
-      sendToServer(message);
+      if(message.startsWith("#")) handleUserCommand(message);
+      else sendToServer(message);
     }
     catch(IOException e)
     {
       clientUI.display
-        ("Could not send message to server.  Terminating client.");
+        ("Could not send message to server. Terminating client.");
       quit();
     }
+  }
+
+  private void handleUserCommand(String message) throws IOException {
+    String[] command = message.split(" ");
+    System.out.println(Arrays.toString(command));
+        switch (command[0]) {
+            case "#quit" -> quit();
+            case "#logoff" -> closeConnection();
+            case "#sethost" -> {
+                if (!isConnected()) {
+                    String newHost = command[1];
+                    setHost(newHost);
+                    System.out.println("Host has been successfully set.");
+                } else {
+                    System.out.println("Cannot set new host while logged on.");
+                }
+            }
+            case "#setport" -> {
+                if (!isConnected()) {
+                    int newPort = Integer.parseInt(command[0]);
+                    setPort(newPort);
+                    System.out.println("Port has been successfully set.");
+                } else {
+                    System.out.println("Cannot set new port while logged on.");
+                }
+            }
+            case "#login" -> {
+                if (!isConnected()) {
+                    openConnection();
+                    System.out.println("Successfully logged in.");
+                } else {
+                    System.out.println("Currently logged in.");
+                }
+            }
+            case "#gethost" -> System.out.println("Current host: " + getHost());
+            case "#getport" -> System.out.println("Current port: " + getPort());
+            default -> System.out.println("Please enter a valid command.");
+        }
   }
   
   /**
