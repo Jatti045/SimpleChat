@@ -84,7 +84,6 @@ public class ChatClient extends AbstractClient
 
   private void handleUserCommand(String message) throws IOException {
     String[] command = message.split(" ");
-    System.out.println(Arrays.toString(command));
         switch (command[0]) {
             case "#quit" -> quit();
             case "#logoff" -> closeConnection();

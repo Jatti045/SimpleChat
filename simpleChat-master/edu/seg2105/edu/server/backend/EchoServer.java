@@ -24,7 +24,7 @@ public class EchoServer extends AbstractServer
   /**
    * The default port to listen on.
    */
-  final public static int DEFAULT_PORT = 5555;
+  //final public static int DEFAULT_PORT = 5555;
   
   //Constructors ****************************************************
   
@@ -106,7 +106,7 @@ public class EchoServer extends AbstractServer
     System.out.println("Goodbye! You have disconnected from the server.");
   }
 
-
+/**
   public static void main(String[] args) 
   {
     int port = 0; //Port to listen on
@@ -131,5 +131,6 @@ public class EchoServer extends AbstractServer
       System.out.println("ERROR - Could not listen for clients!");
     }
   }
+ */
 }
 //End of EchoServer class
