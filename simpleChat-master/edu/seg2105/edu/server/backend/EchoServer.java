@@ -6,6 +6,8 @@ package edu.seg2105.edu.server.backend;
 
 import ocsf.server.*;
 
+import java.sql.SQLOutput;
+
 /**
  * This class overrides some of the methods in the abstract 
  * superclass in order to give more functionality to the server.
@@ -82,6 +84,29 @@ public class EchoServer extends AbstractServer
    * @param args[0] The port number to listen on.  Defaults to 5555 
    *          if no argument is entered.
    */
+
+  /**
+   * Implements the hook method called each time a new client connection is
+   * accepted. The default implementation does nothing.
+   * @param client the connection connected to the client.
+   */
+  protected void clientConnected(ConnectionToClient client) {
+    System.out.println("Welcome! You have connected to the server.");
+  }
+
+  /**
+   * Implements the hook method called each time a client disconnects.
+   * The default implementation does nothing. The method
+   * may be overridden by subclasses but should remains synchronized.
+   *
+   * @param client the connection with the client.
+   */
+  synchronized protected void clientDisconnected(
+          ConnectionToClient client) {
+    System.out.println("Goodbye! You have disconnected from the server.");
+  }
+
+
   public static void main(String[] args) 
   {
     int port = 0; //Port to listen on
