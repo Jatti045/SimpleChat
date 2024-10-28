@@ -27,10 +27,15 @@ public class ChatClient extends AbstractClient
    * The interface type variable.  It allows the implementation of 
    * the display method in the client.
    */
-  ChatIF clientUI; 
+  ChatIF clientUI;
 
-  
-  //Constructors ****************************************************
+  /**
+   * Stores the users login ID
+   */
+  private String loginId = "";
+
+
+    //Constructors ****************************************************
   
   /**
    * Constructs an instance of the chat client.
@@ -38,18 +43,36 @@ public class ChatClient extends AbstractClient
    * @param host The server to connect to.
    * @param port The port number to connect on.
    * @param clientUI The interface type variable.
+   * @param loginId The users login ID
    */
   
-  public ChatClient(String host, int port, ChatIF clientUI) 
+  public ChatClient(String loginId, String host, int port, ChatIF clientUI)
     throws IOException 
   {
     super(host, port); //Call the superclass constructor
     this.clientUI = clientUI;
+    this.loginId = loginId;
     openConnection();
   }
 
   
   //Instance methods ************************************************
+
+    /**
+     * Returns the users login ID
+     * @return loginId
+     */
+    public String getLoginId() {
+        return loginId;
+    }
+
+    /**
+     * Sets the users login ID
+     * @param loginId
+     */
+    public void setLoginId(String loginId) {
+        this.loginId = loginId;
+    }
     
   /**
    * This method handles all data that comes in from the server.
@@ -142,6 +165,21 @@ public class ChatClient extends AbstractClient
   protected void connectionClosed() {
     clientUI.display("Connection closed.");
   }
+
+    /**
+     * Implements the hook method called after a connection has been established. The default
+     * implementation does nothing. It may be overridden by subclasses to do
+     * anything they wish.
+     */
+    @Override
+    protected void connectionEstablished() {
+        try {
+            sendToServer("#login " + getLoginId());
+        } catch (IOException e) {
+            System.out.println("ERROR - Could not send login ID to server");
+            System.exit(1);
+        }
+    }
 
   /**
    * Implements the hook method called each time an exception is thrown by the client's
