@@ -2,6 +2,7 @@ package edu.seg2105.server;
 
 import edu.seg2105.client.common.ChatIF;
 import edu.seg2105.edu.server.backend.EchoServer;
+import ocsf.server.ConnectionToClient;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ public class ServerConsole implements ChatIF {
                     handleServerCommand(message);
                 } else {
                     server.sendToAllClients("SERVER MSG> " + message);
-                    display("SERVER MSG>" + message);
+                    display(message);
                 }
             }
         } catch (Exception ex) {
@@ -42,10 +43,9 @@ public class ServerConsole implements ChatIF {
 
     private void handleServerCommand(String message) throws IOException {
         String[] command = message.split(" ");
-        System.out.println(Arrays.toString(command));
         switch (command[0]) {
             case "#quit" -> {
-                System.out.println("Server is shutting down");
+                System.out.println("Server is shutting down.");
                 System.exit(0);
             }
             case "#stop" -> server.stopListening();
@@ -73,7 +73,7 @@ public class ServerConsole implements ChatIF {
 
     @Override
     public void display(String message) {
-        System.out.println("> " + message);
+        System.out.println("SERVER MSG> " + message);
     }
 
     public static void main(String[] args) {

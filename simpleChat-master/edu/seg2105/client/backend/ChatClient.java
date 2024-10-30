@@ -46,10 +46,8 @@ public class ChatClient extends AbstractClient
    * @param loginId The users login ID
    */
   
-  public ChatClient(String loginId, String host, int port, ChatIF clientUI)
-    throws IOException 
-  {
-    super(host, port); //Call the superclass constructor
+  public ChatClient(String loginId, String host, int port, ChatIF clientUI) throws IOException {
+    super(host, port);
     this.clientUI = clientUI;
     this.loginId = loginId;
     openConnection();
@@ -65,14 +63,6 @@ public class ChatClient extends AbstractClient
     public String getLoginId() {
         return loginId;
     }
-
-    /**
-     * Sets the users login ID
-     * @param loginId
-     */
-    public void setLoginId(String loginId) {
-        this.loginId = loginId;
-    }
     
   /**
    * This method handles all data that comes in from the server.
@@ -82,8 +72,6 @@ public class ChatClient extends AbstractClient
   public void handleMessageFromServer(Object msg) 
   {
     clientUI.display(msg.toString());
-    
-    
   }
 
   /**
@@ -121,7 +109,7 @@ public class ChatClient extends AbstractClient
             }
             case "#setport" -> {
                 if (!isConnected()) {
-                    int newPort = Integer.parseInt(command[0]);
+                    int newPort = Integer.parseInt(command[1]);
                     setPort(newPort);
                     System.out.println("Port has been successfully set.");
                 } else {
@@ -133,7 +121,8 @@ public class ChatClient extends AbstractClient
                     openConnection();
                     System.out.println("Successfully logged in.");
                 } else {
-                    System.out.println("Currently logged in.");
+                    System.out.println("Error: You are already logged in. Connection will be terminated.");
+                    connectionClosed();
                 }
             }
             case "#gethost" -> System.out.println("Current host: " + getHost());
@@ -162,7 +151,7 @@ public class ChatClient extends AbstractClient
    * attempting to reconnect.
    */
   @Override
-  protected void connectionClosed() {
+  protected void connectionClosed() throws IOException {
     clientUI.display("Connection closed.");
   }
 
@@ -196,4 +185,4 @@ public class ChatClient extends AbstractClient
   }
 }
 
-//End of ChatClient class
+
